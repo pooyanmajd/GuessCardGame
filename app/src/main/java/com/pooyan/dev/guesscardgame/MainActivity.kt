@@ -22,6 +22,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pooyan.dev.guesscardgame.MainActivityViewModel.MainActivityUiState
@@ -77,6 +79,8 @@ private fun DrawContent(uiState: MainActivityUiState) {
     val systemUiController = rememberSystemUiController()
     HandleSystemBarsColor(systemUiController = systemUiController)
 
+    val navController: NavHostController = rememberNavController()
+
     GuessCardGameTheme {
         // A surface container using the 'background' color from the theme
         Surface(
@@ -84,9 +88,10 @@ private fun DrawContent(uiState: MainActivityUiState) {
             color = MaterialTheme.colorScheme.background
         ) {
             Column(modifier = Modifier.safeContentPadding()) {
-                when(uiState) {
+                // When cards are loaded go to nav host to show first screen
+                when (uiState) {
                     is Success -> if (uiState.dateLoaded) {
-                        // TODO add nav host
+                        GuessCardGameNavHost(navController = navController)
                     }
                     else -> Loading
                 }
