@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="guess_right">Yes! you guessed it right!</string>
+    <string name="good_luck">Good luck on your guess!</string>
+    <string name="guess_wrong">Oh No! you guessed it wrong!</string>
+    <string name="game_over">Game Over!</string>
+    <string name="current_card">Current card is:</string>
+    <string name="how_to_play">Now you need to guess the next card value! Higher or lower than the current card? Remember Ace is the lowest and King is the highest. </string>
+    <string name="higher">Higher</string>
+    <string name="lower">Lower</string>
+    <string name="start_over">Start Over</string>
+
+    <string name="number_of_lives">Number of lives remaining: %1$d</string>
+    <string name="number_of_guess">Number of correct guess: %1$d</string>
+    <string name="your_result">Your Result is\nCorrect guess: %1$d</string>
+</resources>
