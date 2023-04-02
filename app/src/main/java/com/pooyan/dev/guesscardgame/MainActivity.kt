@@ -12,14 +12,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.pooyan.dev.guesscardgame.MainActivityViewModel.MainActivityUiState
+import com.pooyan.dev.guesscardgame.MainActivityViewModel.MainActivityUiState.Loading
+import com.pooyan.dev.guesscardgame.MainActivityViewModel.MainActivityUiState.Success
 import com.pooyan.dev.guesscardgame.ui.theme.GuessCardGameTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,24 +42,38 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        var uiState: MainActivityUiState by mutableStateOf(Loading)
+
+        // Update the uiState
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState
+                    .onEach {
+                        uiState = it
+                    }
+                    .collect()
+            }
+        }
+
         // Keep the splash screen on-screen until the UI state is loaded. This condition is
         // evaluated each time the app needs to be redrawn so it should be fast to avoid blocking
         // the UI.
         splashScreen.setKeepOnScreenCondition {
-            //TODO add logic to keep splash screen
-            false
+            when (uiState) {
+                is Success -> false
+                else -> true
+            }
         }
-
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        setContent { DrawContent() }
+        setContent { DrawContent(uiState) }
     }
 }
 
 @Composable
-private fun DrawContent() {
+private fun DrawContent(uiState: MainActivityUiState) {
     val systemUiController = rememberSystemUiController()
     HandleSystemBarsColor(systemUiController = systemUiController)
 
@@ -58,7 +84,12 @@ private fun DrawContent() {
             color = MaterialTheme.colorScheme.background
         ) {
             Column(modifier = Modifier.safeContentPadding()) {
-                //TODO add navHost
+                when(uiState) {
+                    is Success -> if (uiState.dateLoaded) {
+                        // TODO add nav host
+                    }
+                    else -> Loading
+                }
             }
         }
     }
