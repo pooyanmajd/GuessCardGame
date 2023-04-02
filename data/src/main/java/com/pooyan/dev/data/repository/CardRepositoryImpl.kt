@@ -63,4 +63,8 @@ class CardRepositoryImpl @Inject constructor(
     override suspend fun insertPlayedCard(id: Int) = withContext(ioDispatcher) {
         playedCardDao.insertPlayedCardId(PlayedCardEntity(cardId = id))
     }
+
+    override suspend fun clearPlayedCardIds() = withContext(ioDispatcher) {
+        playedCardDao.clear()
+    }
 }

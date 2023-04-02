@@ -3,6 +3,7 @@ package com.pooyan.dev.data.usecase
 import com.pooyan.dev.domain.CompareCardsUseCase
 import com.pooyan.dev.domain.GetCardsUseCase
 import com.pooyan.dev.domain.InsertCardsUseCase
+import com.pooyan.dev.domain.ResetPlayedCardUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -20,4 +21,7 @@ interface UseCaseModule {
 
     @Binds
     fun bindsGetCardsUseCase(getCardsUseCaseImpl: GetCardsUseCaseImpl): GetCardsUseCase
+
+    @Binds
+    fun bindRestPlayedCardUseCase(resetPlayedCardUseCaseImpl: ResetPlayedCardUseCaseImpl): ResetPlayedCardUseCase
 }
