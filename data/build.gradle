@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':domain')
 
     implementation "androidx.core:core-ktx:$android_core_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
